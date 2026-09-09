@@ -1,70 +1,88 @@
 {
   "id": "com.sampurno.geniewidget",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "name": "Genie Assistant",
-  "description": "SAP Analytics Cloud custom widget for communicating with the Finance Genie backend.",
+  "description": "SAP Analytics Cloud custom widget for communicating with a Databricks Genie backend.",
   "newInstancePrefix": "GenieAssistant",
-  "vendor": "Sampurno Sarkar",
-  "eula": "",
-  "license": "MIT",
   "webcomponents": [
     {
       "kind": "main",
       "tag": "com-sampurno-geniewidget",
-      "url": "./GenieWidget.js",
-      "integrity": "",
+      "url": "https://cdn.jsdelivr.net/gh/sampurno417/GenieWidget/GenieWidget.js",
       "ignoreIntegrity": true
     }
   ],
   "properties": {
     "backendUrl": {
       "type": "string",
-      "description": "Base URL of the existing Databricks Finance Genie application.",
+      "description": "URL of the Databricks Flask application",
       "default": ""
     }
   },
   "methods": {
     "askGenie": {
-      "description": "Send a plain-English question to Finance Genie.",
+      "description": "Send a natural-language question to Databricks Genie",
       "parameters": [
         {
           "name": "question",
-          "type": "string",
-          "description": "Natural-language question for Genie."
+          "type": "string"
         }
-      ]
+      ],
+      "returnType": "string"
     },
     "clearChat": {
-      "description": "Clear the current chat history and start a new local session."
+      "description": "Clear the current chat conversation",
+      "parameters": [],
+      "returnType": "void"
     },
     "getSessionId": {
-      "description": "Return the current widget session ID.",
+      "description": "Get the current Genie session ID",
+      "parameters": [],
       "returnType": "string"
     },
     "setBackendUrl": {
-      "description": "Set the Databricks application URL used by the widget.",
+      "description": "Set the Databricks backend URL",
       "parameters": [
         {
           "name": "url",
-          "type": "string",
-          "description": "Base URL of the Databricks Finance Genie application."
+          "type": "string"
         }
-      ]
+      ],
+      "returnType": "void"
     },
     "getBackendUrl": {
-      "description": "Return the configured Databricks application URL.",
+      "description": "Get the configured Databricks backend URL",
+      "parameters": [],
       "returnType": "string"
     }
   },
   "events": {
     "onMessageSent": {
-      "description": "Triggered after a user question is submitted."
+      "description": "Fired when a question is sent to the backend",
+      "parameters": [
+        {
+          "name": "question",
+          "type": "string"
+        }
+      ]
     },
     "onResponseReceived": {
-      "description": "Triggered after a Genie response is received."
+      "description": "Fired when a Genie response is received",
+      "parameters": [
+        {
+          "name": "response",
+          "type": "string"
+        }
+      ]
     },
     "onError": {
-      "description": "Triggered when the widget encounters an error."
+      "description": "Fired when an error occurs",
+      "parameters": [
+        {
+          "name": "error",
+          "type": "string"
+        }
+      ]
     }
   }
 }
