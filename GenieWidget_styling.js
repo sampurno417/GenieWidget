@@ -8,166 +8,284 @@
       });
 
       this._shadowRoot.innerHTML = `
+        <style>
+          :host {
+            display: block;
 
-                <style>
+            font-family:
+              Arial,
+              Helvetica,
+              sans-serif;
+          }
 
-                    :host {
-                        display: block;
+          .container {
+            padding: 16px;
+          }
 
-                        font-family:
-                            Arial,
-                            Helvetica,
-                            sans-serif;
-                    }
+          .title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+          }
 
-                    .container {
-                        padding: 16px;
-                    }
+          .description {
+            font-size: 12px;
+            color: #666666;
+            margin-bottom: 14px;
+            line-height: 1.4;
+          }
 
-                    .title {
-                        font-size: 14px;
+          .field {
+            margin-bottom: 16px;
+          }
 
-                        font-weight: 600;
+          .label {
+            display: block;
 
-                        margin-bottom: 8px;
-                    }
+            font-size: 12px;
+            font-weight: 600;
 
-                    .description {
-                        font-size: 12px;
+            margin-bottom: 5px;
 
-                        color: #666666;
+            color: #333333;
+          }
 
-                        margin-bottom: 10px;
+          .help {
+            font-size: 10px;
+            color: #777777;
 
-                        line-height: 1.4;
-                    }
+            margin-top: 5px;
 
-                    .label {
-                        display: block;
+            line-height: 1.4;
+          }
 
-                        font-size: 12px;
+          input {
+            width: 100%;
 
-                        font-weight: 600;
+            height: 36px;
 
-                        margin-bottom: 5px;
+            padding: 0 10px;
 
-                        color: #333333;
-                    }
+            box-sizing: border-box;
 
-                    input {
-                        width: 100%;
+            border:
+              1px solid #cccccc;
 
-                        height: 36px;
+            border-radius: 4px;
 
-                        padding:
-                            0 10px;
+            font-family:
+              Arial,
+              Helvetica,
+              sans-serif;
 
-                        box-sizing:
-                            border-box;
+            font-size: 13px;
 
-                        border:
-                            1px solid #cccccc;
+            outline: none;
 
-                        border-radius: 4px;
+            color: #222222;
 
-                        font-family:
-                            Arial,
-                            Helvetica,
-                            sans-serif;
+            background: #ffffff;
+          }
 
-                        font-size: 13px;
+          input:focus {
+            border-color: #777777;
+          }
 
-                        outline: none;
-                    }
+          input[type="password"] {
+            font-family:
+              Consolas,
+              Monaco,
+              monospace;
 
-                    input:focus {
-                        border-color: #777777;
-                    }
+            letter-spacing: 0.5px;
+          }
 
-                </style>
+          .warning {
+            margin-top: 6px;
+
+            padding: 8px 10px;
+
+            border-radius: 4px;
+
+            background: #fff7e6;
+
+            color: #8a5a00;
+
+            font-size: 10px;
+
+            line-height: 1.4;
+          }
+        </style>
+
+        <div class="container">
+
+          <div class="title">
+            Genie Assistant
+          </div>
+
+          <div class="description">
+            Configure the connection to the
+            Databricks Finance Genie application.
+          </div>
 
 
-                <div class="container">
+          <!-- BACKEND URL -->
 
-                    <div class="title">
-                        Genie Assistant
-                    </div>
+          <div class="field">
+
+            <label class="label">
+              Databricks Backend URL
+            </label>
+
+            <input
+              id="backendUrl"
+              type="text"
+              autocomplete="off"
+              placeholder="https://your-databricks-app-url"
+            />
+
+            <div class="help">
+              Base URL of the Databricks Flask application.
+            </div>
+
+          </div>
 
 
-                    <div class="description">
-                        Configure the connection to the
-                        Databricks Flask application.
-                    </div>
+          <!-- ACCESS TOKEN -->
+
+          <div class="field">
+
+            <label class="label">
+              OAuth Access Token
+            </label>
+
+            <input
+              id="accessToken"
+              type="password"
+              autocomplete="off"
+              spellcheck="false"
+              placeholder="Paste OAuth access token"
+            />
+
+            <div class="help">
+              Short-lived Databricks OAuth 2.0 access token
+              used to authenticate API requests.
+            </div>
+
+          </div>
 
 
-                    <label class="label">
-                        Databricks Backend URL
-                    </label>
+          <!-- SECURITY WARNING -->
 
+          <div class="warning">
+            POC only: do not use a long-lived token or
+            client secret here. This value is available
+            to the browser.
+          </div>
 
-                    <input
-                        id="backendUrl"
-                        type="text"
-                        placeholder="https://your-databricks-app-url"
-                    />
+        </div>
+      `;
 
-                </div>
+      this._backendUrlInput = this._shadowRoot.querySelector("#backendUrl");
 
-            `;
-
-      this._input = this._shadowRoot.querySelector("#backendUrl");
+      this._accessTokenInput = this._shadowRoot.querySelector("#accessToken");
 
       /*
-       * SAC property change
-       * when the user changes the value.
+       * BACKEND URL
        */
 
-      this._input.addEventListener("change", () => {
+      this._backendUrlInput.addEventListener("change", () => {
         this._propertiesChanged();
       });
 
-      /*
-       * Also save when the input loses focus.
-       */
-
-      this._input.addEventListener("blur", () => {
+      this._backendUrlInput.addEventListener("blur", () => {
         this._propertiesChanged();
       });
 
-      /*
-       * Enter key.
-       */
-
-      this._input.addEventListener("keydown", (event) => {
+      this._backendUrlInput.addEventListener("keydown", (event) => {
         if (event.key === "Enter") {
           event.preventDefault();
 
           this._propertiesChanged();
 
-          this._input.blur();
+          this._backendUrlInput.blur();
+        }
+      });
+
+      /*
+       * ACCESS TOKEN
+       */
+
+      this._accessTokenInput.addEventListener("change", () => {
+        this._propertiesChanged();
+      });
+
+      this._accessTokenInput.addEventListener("blur", () => {
+        this._propertiesChanged();
+      });
+
+      this._accessTokenInput.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") {
+          event.preventDefault();
+
+          this._propertiesChanged();
+
+          this._accessTokenInput.blur();
         }
       });
     }
 
     /* =====================================================
-           SAC PROPERTY SETTER
-           ===================================================== */
+       SAC PROPERTY HANDLING
+       ===================================================== */
+
+    onCustomWidgetBeforeUpdate(changedProperties) {
+      if (
+        Object.prototype.hasOwnProperty.call(changedProperties, "backendUrl")
+      ) {
+        this.backendUrl = changedProperties.backendUrl || "";
+      }
+
+      if (
+        Object.prototype.hasOwnProperty.call(changedProperties, "accessToken")
+      ) {
+        this.accessToken = changedProperties.accessToken || "";
+      }
+    }
+
+    onCustomWidgetAfterUpdate() {
+      this._backendUrlInput.value = this.backendUrl || "";
+
+      this._accessTokenInput.value = this.accessToken || "";
+    }
+
+    /* =====================================================
+       BACKEND URL
+       ===================================================== */
 
     set backendUrl(value) {
-      this._input.value = value || "";
+      this._backendUrlInput.value = value || "";
     }
-
-    /* =====================================================
-           SAC PROPERTY GETTER
-           ===================================================== */
 
     get backendUrl() {
-      return this._input.value;
+      return this._backendUrlInput.value;
     }
 
     /* =====================================================
-           NOTIFY SAC
-           ===================================================== */
+       ACCESS TOKEN
+       ===================================================== */
+
+    set accessToken(value) {
+      this._accessTokenInput.value = value || "";
+    }
+
+    get accessToken() {
+      return this._accessTokenInput.value;
+    }
+
+    /* =====================================================
+       NOTIFY SAC
+       ===================================================== */
 
     _propertiesChanged() {
       this.dispatchEvent(
@@ -175,6 +293,8 @@
           detail: {
             properties: {
               backendUrl: this.backendUrl,
+
+              accessToken: this.accessToken,
             },
           },
         }),
@@ -183,8 +303,8 @@
   }
 
   /* =========================================================
-       REGISTER STYLING COMPONENT
-       ========================================================= */
+     REGISTER STYLING COMPONENT
+     ========================================================= */
 
   if (!customElements.get("com-sampurno-geniewidget-styling")) {
     customElements.define(

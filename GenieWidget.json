@@ -1,88 +1,96 @@
 {
   "id": "com.sampurno.geniewidget",
-  "version": "1.0.2",
+  "version": "0.2.0",
   "name": "Genie Assistant",
-  "description": "SAP Analytics Cloud custom widget for communicating with a Databricks Genie backend.",
+  "description": "SAP Analytics Cloud custom widget for communicating with the Finance Genie backend using a Databricks OAuth access token.",
   "newInstancePrefix": "GenieAssistant",
-
+  "vendor": "Sampurno Sarkar",
+  "eula": "",
+  "license": "MIT",
   "webcomponents": [
     {
       "kind": "main",
       "tag": "com-sampurno-geniewidget",
-      "url": "https://cdn.jsdelivr.net/gh/sampurno417/GenieWidget@YOUR_COMMIT_SHA/GenieWidget.js",
+      "url": "./GenieWidget.js",
       "integrity": "",
       "ignoreIntegrity": true
     },
     {
       "kind": "styling",
       "tag": "com-sampurno-geniewidget-styling",
-      "url": "https://cdn.jsdelivr.net/gh/sampurno417/GenieWidget@YOUR_COMMIT_SHA/GenieWidget_styling.js",
+      "url": "./GenieWidget_styling.js",
       "integrity": "",
       "ignoreIntegrity": true
     }
   ],
-
   "properties": {
     "backendUrl": {
       "type": "string",
-      "description": "URL of the Databricks Flask application.",
+      "description": "Base URL of the existing Databricks Finance Genie application.",
+      "default": ""
+    },
+    "accessToken": {
+      "type": "string",
+      "description": "Short-lived Databricks OAuth 2.0 access token used to authenticate calls to the Databricks App. POC only; do not use a long-lived secret.",
       "default": ""
     }
   },
-
   "methods": {
     "askGenie": {
-      "description": "Send a natural-language question to Databricks Genie.",
+      "description": "Send a plain-English question to Finance Genie.",
       "parameters": [
         {
           "name": "question",
-          "type": "string"
+          "type": "string",
+          "description": "Natural-language question for Genie."
         }
-      ],
-      "returnType": "string"
+      ]
     },
-
     "clearChat": {
-      "description": "Clear the current chat conversation.",
-      "parameters": [],
-      "returnType": "void"
+      "description": "Clear the current chat history and start a new local session."
     },
-
     "getSessionId": {
-      "description": "Get the current Genie session ID.",
-      "parameters": [],
+      "description": "Return the current widget session ID.",
       "returnType": "string"
     },
-
     "setBackendUrl": {
-      "description": "Set the Databricks backend URL.",
+      "description": "Set the Databricks application URL used by the widget.",
       "parameters": [
         {
           "name": "url",
-          "type": "string"
+          "type": "string",
+          "description": "Base URL of the Databricks Finance Genie application."
         }
-      ],
-      "returnType": "void"
+      ]
     },
-
     "getBackendUrl": {
-      "description": "Get the configured Databricks backend URL.",
-      "parameters": [],
+      "description": "Return the configured Databricks application URL.",
+      "returnType": "string"
+    },
+    "setAccessToken": {
+      "description": "Set the Databricks OAuth access token used by the widget.",
+      "parameters": [
+        {
+          "name": "token",
+          "type": "string",
+          "description": "Short-lived Databricks OAuth 2.0 access token."
+        }
+      ]
+    },
+    "getAccessToken": {
+      "description": "Return the currently configured OAuth access token.",
       "returnType": "string"
     }
   },
-
   "events": {
     "onMessageSent": {
-      "description": "Fired when a question is sent to the backend."
+      "description": "Triggered after a user question is submitted."
     },
-
     "onResponseReceived": {
-      "description": "Fired when a Genie response is received."
+      "description": "Triggered after a Genie response is received."
     },
-
     "onError": {
-      "description": "Fired when an error occurs."
+      "description": "Triggered when the widget encounters an error."
     }
   }
 }
