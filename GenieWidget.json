@@ -11,7 +11,7 @@
     {
       "kind": "main",
       "tag": "com-sampurno-geniewidget",
-      "url": "./GenieWidget.js",
+      "url": "https://cdn.jsdelivr.net/gh/sampurno417/GenieWidget/GenieWidget.js",
       "integrity": "",
       "ignoreIntegrity": true
     }
