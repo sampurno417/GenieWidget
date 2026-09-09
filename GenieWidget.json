@@ -1,27 +1,38 @@
 {
   "id": "com.sampurno.geniewidget",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "name": "Genie Assistant",
   "description": "SAP Analytics Cloud custom widget for communicating with a Databricks Genie backend.",
   "newInstancePrefix": "GenieAssistant",
+
   "webcomponents": [
     {
       "kind": "main",
       "tag": "com-sampurno-geniewidget",
-      "url": "https://cdn.jsdelivr.net/gh/sampurno417/GenieWidget@cd8407c/GenieWidget.js",
+      "url": "https://cdn.jsdelivr.net/gh/sampurno417/GenieWidget@YOUR_COMMIT_SHA/GenieWidget.js",
+      "integrity": "",
+      "ignoreIntegrity": true
+    },
+    {
+      "kind": "styling",
+      "tag": "com-sampurno-geniewidget-styling",
+      "url": "https://cdn.jsdelivr.net/gh/sampurno417/GenieWidget@YOUR_COMMIT_SHA/GenieWidget_styling.js",
+      "integrity": "",
       "ignoreIntegrity": true
     }
   ],
+
   "properties": {
     "backendUrl": {
       "type": "string",
-      "description": "URL of the Databricks Flask application",
+      "description": "URL of the Databricks Flask application.",
       "default": ""
     }
   },
+
   "methods": {
     "askGenie": {
-      "description": "Send a natural-language question to Databricks Genie",
+      "description": "Send a natural-language question to Databricks Genie.",
       "parameters": [
         {
           "name": "question",
@@ -30,18 +41,21 @@
       ],
       "returnType": "string"
     },
+
     "clearChat": {
-      "description": "Clear the current chat conversation",
+      "description": "Clear the current chat conversation.",
       "parameters": [],
       "returnType": "void"
     },
+
     "getSessionId": {
-      "description": "Get the current Genie session ID",
+      "description": "Get the current Genie session ID.",
       "parameters": [],
       "returnType": "string"
     },
+
     "setBackendUrl": {
-      "description": "Set the Databricks backend URL",
+      "description": "Set the Databricks backend URL.",
       "parameters": [
         {
           "name": "url",
@@ -50,39 +64,25 @@
       ],
       "returnType": "void"
     },
+
     "getBackendUrl": {
-      "description": "Get the configured Databricks backend URL",
+      "description": "Get the configured Databricks backend URL.",
       "parameters": [],
       "returnType": "string"
     }
   },
+
   "events": {
     "onMessageSent": {
-      "description": "Fired when a question is sent to the backend",
-      "parameters": [
-        {
-          "name": "question",
-          "type": "string"
-        }
-      ]
+      "description": "Fired when a question is sent to the backend."
     },
+
     "onResponseReceived": {
-      "description": "Fired when a Genie response is received",
-      "parameters": [
-        {
-          "name": "response",
-          "type": "string"
-        }
-      ]
+      "description": "Fired when a Genie response is received."
     },
+
     "onError": {
-      "description": "Fired when an error occurs",
-      "parameters": [
-        {
-          "name": "error",
-          "type": "string"
-        }
-      ]
+      "description": "Fired when an error occurs."
     }
   }
 }
