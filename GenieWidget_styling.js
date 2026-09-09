@@ -11,11 +11,7 @@
         <style>
           :host {
             display: block;
-
-            font-family:
-              Arial,
-              Helvetica,
-              sans-serif;
+            font-family: Arial, Helvetica, sans-serif;
           }
 
           .container {
@@ -41,49 +37,34 @@
 
           .label {
             display: block;
-
             font-size: 12px;
             font-weight: 600;
-
             margin-bottom: 5px;
-
             color: #333333;
           }
 
           .help {
             font-size: 10px;
             color: #777777;
-
             margin-top: 5px;
-
             line-height: 1.4;
           }
 
           input {
             width: 100%;
-
             height: 36px;
-
             padding: 0 10px;
-
             box-sizing: border-box;
 
-            border:
-              1px solid #cccccc;
-
+            border: 1px solid #cccccc;
             border-radius: 4px;
 
-            font-family:
-              Arial,
-              Helvetica,
-              sans-serif;
-
+            font-family: Arial, Helvetica, sans-serif;
             font-size: 13px;
 
             outline: none;
 
             color: #222222;
-
             background: #ffffff;
           }
 
@@ -92,27 +73,20 @@
           }
 
           input[type="password"] {
-            font-family:
-              Consolas,
-              Monaco,
-              monospace;
-
+            font-family: Consolas, Monaco, monospace;
             letter-spacing: 0.5px;
           }
 
           .warning {
             margin-top: 6px;
-
             padding: 8px 10px;
 
             border-radius: 4px;
 
             background: #fff7e6;
-
             color: #8a5a00;
 
             font-size: 10px;
-
             line-height: 1.4;
           }
         </style>
@@ -129,7 +103,9 @@
           </div>
 
 
-          <!-- BACKEND URL -->
+          <!-- =========================================
+               BACKEND URL
+               ========================================= -->
 
           <div class="field">
 
@@ -141,6 +117,7 @@
               id="backendUrl"
               type="text"
               autocomplete="off"
+              spellcheck="false"
               placeholder="https://your-databricks-app-url"
             />
 
@@ -151,7 +128,9 @@
           </div>
 
 
-          <!-- ACCESS TOKEN -->
+          <!-- =========================================
+               ACCESS TOKEN
+               ========================================= -->
 
           <div class="field">
 
@@ -175,7 +154,9 @@
           </div>
 
 
-          <!-- SECURITY WARNING -->
+          <!-- =========================================
+               SECURITY WARNING
+               ========================================= -->
 
           <div class="warning">
             POC only: do not use a long-lived token or
@@ -186,12 +167,20 @@
         </div>
       `;
 
+      /*
+       * =====================================================
+       * INPUT REFERENCES
+       * =====================================================
+       */
+
       this._backendUrlInput = this._shadowRoot.querySelector("#backendUrl");
 
       this._accessTokenInput = this._shadowRoot.querySelector("#accessToken");
 
       /*
-       * BACKEND URL
+       * =====================================================
+       * BACKEND URL EVENTS
+       * =====================================================
        */
 
       this._backendUrlInput.addEventListener("change", () => {
@@ -213,7 +202,9 @@
       });
 
       /*
-       * ACCESS TOKEN
+       * =====================================================
+       * ACCESS TOKEN EVENTS
+       * =====================================================
        */
 
       this._accessTokenInput.addEventListener("change", () => {
@@ -235,57 +226,98 @@
       });
     }
 
-    /* =====================================================
-       SAC PROPERTY HANDLING
-       ===================================================== */
+    /*
+     * =========================================================
+     * SAC PROPERTY LIFECYCLE
+     * =========================================================
+     */
 
     onCustomWidgetBeforeUpdate(changedProperties) {
+      /*
+       * SAC provides changedProperties as a Map-like object.
+       */
+
       if (
-        Object.prototype.hasOwnProperty.call(changedProperties, "backendUrl")
+        changedProperties &&
+        typeof changedProperties.has === "function" &&
+        changedProperties.has("backendUrl")
       ) {
-        this.backendUrl = changedProperties.backendUrl || "";
+        const value = changedProperties.get("backendUrl");
+
+        this.backendUrl = value || "";
       }
 
       if (
-        Object.prototype.hasOwnProperty.call(changedProperties, "accessToken")
+        changedProperties &&
+        typeof changedProperties.has === "function" &&
+        changedProperties.has("accessToken")
       ) {
-        this.accessToken = changedProperties.accessToken || "";
+        const value = changedProperties.get("accessToken");
+
+        this.accessToken = value || "";
       }
     }
 
     onCustomWidgetAfterUpdate() {
-      this._backendUrlInput.value = this.backendUrl || "";
+      /*
+       * Make sure the styling panel reflects
+       * the latest SAC property values.
+       */
 
-      this._accessTokenInput.value = this.accessToken || "";
+      if (this._backendUrlInput) {
+        this._backendUrlInput.value = this.backendUrl || "";
+      }
+
+      if (this._accessTokenInput) {
+        this._accessTokenInput.value = this.accessToken || "";
+      }
     }
 
-    /* =====================================================
-       BACKEND URL
-       ===================================================== */
+    /*
+     * =========================================================
+     * BACKEND URL PROPERTY
+     * =========================================================
+     */
 
     set backendUrl(value) {
-      this._backendUrlInput.value = value || "";
+      if (this._backendUrlInput) {
+        this._backendUrlInput.value = value || "";
+      }
     }
 
     get backendUrl() {
-      return this._backendUrlInput.value;
+      if (!this._backendUrlInput) {
+        return "";
+      }
+
+      return this._backendUrlInput.value || "";
     }
 
-    /* =====================================================
-       ACCESS TOKEN
-       ===================================================== */
+    /*
+     * =========================================================
+     * ACCESS TOKEN PROPERTY
+     * =========================================================
+     */
 
     set accessToken(value) {
-      this._accessTokenInput.value = value || "";
+      if (this._accessTokenInput) {
+        this._accessTokenInput.value = value || "";
+      }
     }
 
     get accessToken() {
-      return this._accessTokenInput.value;
+      if (!this._accessTokenInput) {
+        return "";
+      }
+
+      return this._accessTokenInput.value || "";
     }
 
-    /* =====================================================
-       NOTIFY SAC
-       ===================================================== */
+    /*
+     * =========================================================
+     * NOTIFY SAC OF PROPERTY CHANGES
+     * =========================================================
+     */
 
     _propertiesChanged() {
       this.dispatchEvent(
@@ -293,7 +325,6 @@
           detail: {
             properties: {
               backendUrl: this.backendUrl,
-
               accessToken: this.accessToken,
             },
           },
@@ -302,14 +333,15 @@
     }
   }
 
-  /* =========================================================
-     REGISTER STYLING COMPONENT
-     ========================================================= */
+  /*
+   * ===========================================================
+   * REGISTER SAC STYLING COMPONENT
+   * ===========================================================
+   */
 
   if (!customElements.get("com-sampurno-geniewidget-styling")) {
     customElements.define(
       "com-sampurno-geniewidget-styling",
-
       GenieWidgetStylingPanel,
     );
   }
