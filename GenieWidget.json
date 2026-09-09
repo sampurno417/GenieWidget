@@ -1,0 +1,70 @@
+{
+  "id": "com.sampurno.geniewidget",
+  "version": "0.1.0",
+  "name": "Genie Assistant",
+  "description": "SAP Analytics Cloud custom widget for communicating with the Finance Genie backend.",
+  "newInstancePrefix": "GenieAssistant",
+  "vendor": "Sampurno Sarkar",
+  "eula": "",
+  "license": "MIT",
+  "webcomponents": [
+    {
+      "kind": "main",
+      "tag": "com-sampurno-geniewidget",
+      "url": "./GenieWidget.js",
+      "integrity": "",
+      "ignoreIntegrity": true
+    }
+  ],
+  "properties": {
+    "backendUrl": {
+      "type": "string",
+      "description": "Base URL of the existing Databricks Finance Genie application.",
+      "default": ""
+    }
+  },
+  "methods": {
+    "askGenie": {
+      "description": "Send a plain-English question to Finance Genie.",
+      "parameters": [
+        {
+          "name": "question",
+          "type": "string",
+          "description": "Natural-language question for Genie."
+        }
+      ]
+    },
+    "clearChat": {
+      "description": "Clear the current chat history and start a new local session."
+    },
+    "getSessionId": {
+      "description": "Return the current widget session ID.",
+      "returnType": "string"
+    },
+    "setBackendUrl": {
+      "description": "Set the Databricks application URL used by the widget.",
+      "parameters": [
+        {
+          "name": "url",
+          "type": "string",
+          "description": "Base URL of the Databricks Finance Genie application."
+        }
+      ]
+    },
+    "getBackendUrl": {
+      "description": "Return the configured Databricks application URL.",
+      "returnType": "string"
+    }
+  },
+  "events": {
+    "onMessageSent": {
+      "description": "Triggered after a user question is submitted."
+    },
+    "onResponseReceived": {
+      "description": "Triggered after a Genie response is received."
+    },
+    "onError": {
+      "description": "Triggered when the widget encounters an error."
+    }
+  }
+}
