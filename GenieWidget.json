@@ -8,7 +8,7 @@
     {
       "kind": "main",
       "tag": "com-sampurno-geniewidget",
-      "url": "https://cdn.jsdelivr.net/gh/sampurno417/GenieWidget/GenieWidget.js",
+      "url": "https://cdn.jsdelivr.net/gh/sampurno417/GenieWidget@cd8407c/GenieWidget.js",
       "ignoreIntegrity": true
     }
   ],
