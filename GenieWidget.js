@@ -33,15 +33,12 @@
          ========================================================= */
 
       this.shadowRoot.innerHTML = `
-
         <style>
 
           :host {
             display: block;
-
             width: 100%;
             height: 100%;
-
             box-sizing: border-box;
 
             font-family:
@@ -50,32 +47,29 @@
               sans-serif;
           }
 
-
           * {
             box-sizing: border-box;
           }
 
+          /* =====================================================
+             CONTAINER
+             ===================================================== */
 
           .container {
             width: 100%;
             height: 100%;
-
             min-height: 350px;
 
             display: flex;
-
             flex-direction: column;
 
             background: #ffffff;
 
-            border:
-              1px solid #d9d9d9;
-
+            border: 1px solid #d9d9d9;
             border-radius: 8px;
 
             overflow: hidden;
           }
-
 
           /* =====================================================
              HEADER
@@ -83,36 +77,27 @@
 
           .header {
             height: 48px;
-
             min-height: 48px;
 
             display: flex;
-
             align-items: center;
-
             justify-content: space-between;
 
             padding: 0 16px;
 
-            border-bottom:
-              1px solid #e5e5e5;
+            border-bottom: 1px solid #e5e5e5;
 
             background: #ffffff;
           }
 
-
           .title {
             font-size: 15px;
-
             font-weight: 600;
-
             color: #222222;
           }
 
-
           .status {
             display: flex;
-
             align-items: center;
 
             gap: 6px;
@@ -122,10 +107,8 @@
             color: #777777;
           }
 
-
           .status-dot {
             width: 7px;
-
             height: 7px;
 
             border-radius: 50%;
@@ -133,21 +116,17 @@
             background: #999999;
           }
 
-
           .status.ready .status-dot {
             background: #3a9b5f;
           }
-
 
           .status.busy .status-dot {
             background: #d99b00;
           }
 
-
           .status.error .status-dot {
             background: #d64545;
           }
-
 
           /* =====================================================
              CHAT
@@ -163,7 +142,6 @@
             background: #fafafa;
           }
 
-
           .welcome {
             text-align: center;
 
@@ -174,17 +152,14 @@
             font-size: 14px;
           }
 
-
           .welcome-title {
             font-size: 18px;
-
             font-weight: 600;
 
             color: #333333;
 
             margin-bottom: 8px;
           }
-
 
           /* =====================================================
              MESSAGE
@@ -196,33 +171,31 @@
             margin-bottom: 14px;
           }
 
-
           .message.user {
             justify-content: flex-end;
           }
-
 
           .message.assistant {
             justify-content: flex-start;
           }
 
-
           .bubble {
-            max-width: 80%;
+            max-width: 88%;
 
-            padding: 10px 13px;
+            padding: 11px 13px;
 
             border-radius: 10px;
 
             font-size: 14px;
 
-            line-height: 1.45;
+            line-height: 1.5;
 
             white-space: normal;
 
             word-wrap: break-word;
-          }
 
+            overflow-wrap: anywhere;
+          }
 
           .user .bubble {
             background: #e8f0fe;
@@ -232,48 +205,324 @@
             border-bottom-right-radius: 3px;
           }
 
-
           .assistant .bubble {
             background: #ffffff;
 
             color: #222222;
 
-            border:
-              1px solid #e2e2e2;
+            border: 1px solid #e2e2e2;
 
             border-bottom-left-radius: 3px;
           }
 
-
           .error-bubble {
             background: #fff1f1 !important;
 
-            border-color:
-              #efb0b0 !important;
+            border-color: #efb0b0 !important;
 
             color: #9b2525 !important;
           }
 
+          /* =====================================================
+             TEXT FORMATTING
+             ===================================================== */
+
+          .bubble p {
+            margin: 0 0 9px;
+          }
+
+          .bubble p:last-child {
+            margin-bottom: 0;
+          }
+
+          .bubble ul,
+          .bubble ol {
+            margin: 6px 0 10px 21px;
+
+            padding: 0;
+          }
+
+          .bubble li {
+            margin: 4px 0;
+          }
+
+          .bubble strong {
+            font-weight: 700;
+          }
+
+          .bubble em {
+            font-style: italic;
+          }
+
+          .bubble code {
+            padding: 2px 5px;
+
+            border-radius: 4px;
+
+            background: #f1f3f5;
+
+            color: #333333;
+
+            font-family:
+              Consolas,
+              Monaco,
+              monospace;
+
+            font-size: 0.9em;
+          }
+
+          .md-h1,
+          .md-h2,
+          .md-h3 {
+            margin: 3px 0 9px;
+
+            line-height: 1.3;
+
+            color: #222222;
+          }
+
+          .md-h1 {
+            font-size: 18px;
+            font-weight: 700;
+          }
+
+          .md-h2 {
+            font-size: 16px;
+            font-weight: 700;
+          }
+
+          .md-h3 {
+            font-size: 14px;
+            font-weight: 700;
+          }
+
+          .md-codeblock {
+            margin: 9px 0;
+
+            padding: 10px;
+
+            border-radius: 6px;
+
+            background: #1e1e1e;
+
+            color: #f5f5f5;
+
+            overflow-x: auto;
+
+            font-family:
+              Consolas,
+              Monaco,
+              monospace;
+
+            font-size: 11px;
+
+            line-height: 1.5;
+          }
+
+          .bubble hr {
+            border: 0;
+
+            border-top: 1px solid #e5e5e5;
+
+            margin: 11px 0;
+          }
+
+          /* =====================================================
+             VISUALIZATION
+             ===================================================== */
+
+          .visualization-container {
+            margin-top: 14px;
+
+            padding: 10px;
+
+            border: 1px solid #e5e5e5;
+
+            border-radius: 8px;
+
+            background: #ffffff;
+          }
+
+          .visualization-header {
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 8px;
+
+            margin-bottom: 8px;
+          }
+
+          .visualization-title {
+            font-size: 12px;
+
+            font-weight: 600;
+
+            color: #333333;
+
+            overflow: hidden;
+
+            text-overflow: ellipsis;
+
+            white-space: nowrap;
+          }
+
+          .chart-type {
+            font-size: 10px;
+
+            color: #777777;
+
+            white-space: nowrap;
+          }
+
+          .chart-toolbar {
+            display: flex;
+
+            flex-wrap: wrap;
+
+            gap: 5px;
+
+            margin-bottom: 8px;
+          }
+
+          .chart-button {
+            border: 1px solid #d6d6d6;
+
+            background: #ffffff;
+
+            color: #555555;
+
+            border-radius: 4px;
+
+            padding: 4px 8px;
+
+            font-size: 10px;
+
+            cursor: pointer;
+          }
+
+          .chart-button:hover {
+            background: #f5f5f5;
+          }
+
+          .chart-button.active {
+            background: #333333;
+
+            border-color: #333333;
+
+            color: #ffffff;
+          }
+
+          .chart-wrap {
+            width: 100%;
+
+            min-height: 230px;
+
+            overflow: hidden;
+          }
+
+          .chart-wrap svg {
+            display: block;
+
+            width: 100%;
+
+            height: auto;
+
+            min-height: 230px;
+          }
+
+          .chart-empty {
+            min-height: 120px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            color: #888888;
+
+            font-size: 12px;
+
+            text-align: center;
+          }
+
+          /* =====================================================
+             TABLE
+             ===================================================== */
+
+          .table-container {
+            margin-top: 12px;
+
+            overflow-x: auto;
+
+            border: 1px solid #e0e0e0;
+
+            border-radius: 6px;
+          }
+
+          table {
+            border-collapse: collapse;
+
+            width: 100%;
+
+            font-size: 12px;
+
+            background: #ffffff;
+          }
+
+          th,
+          td {
+            border-bottom: 1px solid #e5e5e5;
+
+            padding: 7px 9px;
+
+            text-align: left;
+
+            white-space: nowrap;
+          }
+
+          th {
+            background: #f4f4f4;
+
+            font-weight: 600;
+
+            color: #333333;
+          }
+
+          tbody tr:last-child td {
+            border-bottom: none;
+          }
+
+          tbody tr:hover {
+            background: #fafafa;
+          }
 
           /* =====================================================
              SQL
              ===================================================== */
 
           .sql-container {
-            margin-top: 10px;
+            margin-top: 11px;
           }
 
-
           .sql-toggle {
+            display: inline-block;
+
             cursor: pointer;
 
-            font-size: 12px;
+            font-size: 11px;
 
-            color: #555555;
+            color: #666666;
 
             user-select: none;
           }
 
+          .sql-toggle:hover {
+            color: #222222;
+          }
 
           .sql {
             display: none;
@@ -297,62 +546,21 @@
 
             font-size: 11px;
 
+            line-height: 1.5;
+
             white-space: pre-wrap;
           }
-
 
           .sql.visible {
             display: block;
           }
 
-
           /* =====================================================
-             TABLE
-             ===================================================== */
-
-          .table-container {
-            margin-top: 10px;
-
-            overflow-x: auto;
-          }
-
-
-          table {
-            border-collapse: collapse;
-
-            width: 100%;
-
-            font-size: 12px;
-          }
-
-
-          th,
-          td {
-            border:
-              1px solid #dddddd;
-
-            padding: 6px 8px;
-
-            text-align: left;
-
-            white-space: nowrap;
-          }
-
-
-          th {
-            background: #f2f2f2;
-
-            font-weight: 600;
-          }
-
-
-          /* =====================================================
-             INPUT AREA
+             INPUT
              ===================================================== */
 
           .input-area {
-            border-top:
-              1px solid #e5e5e5;
+            border-top: 1px solid #e5e5e5;
 
             padding: 10px;
 
@@ -362,7 +570,6 @@
 
             gap: 8px;
           }
-
 
           .input {
             flex: 1;
@@ -377,8 +584,7 @@
 
             padding: 10px 12px;
 
-            border:
-              1px solid #cccccc;
+            border: 1px solid #cccccc;
 
             border-radius: 6px;
 
@@ -389,11 +595,9 @@
             font-size: 14px;
           }
 
-
           .input:focus {
             border-color: #888888;
           }
-
 
           .send {
             width: 70px;
@@ -411,18 +615,15 @@
             cursor: pointer;
           }
 
-
           .send:hover {
             background: #222222;
           }
-
 
           .send:disabled {
             background: #aaaaaa;
 
             cursor: not-allowed;
           }
-
 
           /* =====================================================
              CLEAR
@@ -448,6 +649,9 @@
             display: none;
           }
 
+          .clear:hover {
+            color: #333333;
+          }
 
           /* =====================================================
              TYPING
@@ -461,7 +665,6 @@
             align-items: center;
           }
 
-
           .typing span {
             width: 5px;
 
@@ -471,41 +674,32 @@
 
             background: #999999;
 
-            animation:
-              blink 1.2s infinite;
+            animation: blink 1.2s infinite;
           }
-
 
           .typing span:nth-child(2) {
             animation-delay: 0.2s;
           }
 
-
           .typing span:nth-child(3) {
             animation-delay: 0.4s;
           }
 
-
           @keyframes blink {
-
             0%,
             60%,
             100% {
               opacity: 0.3;
             }
 
-
             30% {
               opacity: 1;
             }
-
           }
 
         </style>
 
-
         <div class="container">
-
 
           <!-- HEADER -->
 
@@ -514,7 +708,6 @@
             <div class="title">
               Genie Assistant
             </div>
-
 
             <div class="status ready">
 
@@ -538,7 +731,6 @@
               <div class="welcome-title">
                 Ask Genie
               </div>
-
 
               <div>
                 Ask a financial question in plain English.
@@ -567,13 +759,11 @@
               placeholder="Ask a question..."
             ></textarea>
 
-
             <button class="send">
               ➤
             </button>
 
           </div>
-
 
         </div>
       `;
@@ -623,10 +813,13 @@
     }
 
     onCustomWidgetAfterUpdate(changedProperties) {
-      if ("backendUrl" in changedProperties) {
+      if (
+        changedProperties &&
+        Object.prototype.hasOwnProperty.call(changedProperties, "backendUrl")
+      ) {
         const url = changedProperties.backendUrl || "";
 
-        if (url.trim()) {
+        if (String(url).trim()) {
           this._setStatus("ready", "Ready");
         } else {
           this._setStatus("error", "Backend URL required");
@@ -938,7 +1131,6 @@
               this._getApiUrl(
                 `/api/chat/status/${encodeURIComponent(requestId)}`,
               ),
-
               {
                 method: "GET",
 
@@ -1025,19 +1217,20 @@
     _displayGenieResponse(data) {
       const message = data.message || {};
 
-      const text = this._extractResponseText(data);
+      const table = message.table;
+
+      const originalText = this._extractResponseText(data);
+
+      const cleanedText = this._cleanResponseText(originalText, table);
 
       const messageElement = this._addMessage(
         "assistant",
-
-        text || "No response received.",
+        cleanedText || "No response received.",
       );
 
-      if (message.sql) {
-        this._addSql(messageElement, message.sql);
-      }
-
-      const table = message.table;
+      /* =====================================================
+         VISUALIZATION
+         ===================================================== */
 
       if (
         table &&
@@ -1045,9 +1238,29 @@
         Array.isArray(table.rows) &&
         table.columns.length > 0
       ) {
+        this._addVisualization(messageElement, table, message);
+
+        /* ===================================================
+           STRUCTURED TABLE
+           =================================================== */
+
         this._addTable(messageElement, table);
       }
+
+      /* =====================================================
+         SQL
+         ===================================================== */
+
+      if (message.sql) {
+        this._addSql(messageElement, message.sql);
+      }
+
+      this._scrollToBottom();
     }
+
+    /* =========================================================
+       EXTRACT RESPONSE TEXT
+       ========================================================= */
 
     _extractResponseText(data) {
       if (!data) {
@@ -1101,6 +1314,10 @@
       return message;
     }
 
+    /* =========================================================
+       TYPING
+       ========================================================= */
+
     _addTypingMessage() {
       const message = document.createElement("div");
 
@@ -1111,17 +1328,11 @@
       bubble.className = "bubble";
 
       bubble.innerHTML = `
-
         <div class="typing">
-
           <span></span>
-
           <span></span>
-
           <span></span>
-
         </div>
-
       `;
 
       message.appendChild(bubble);
@@ -1156,7 +1367,69 @@
     }
 
     /* =========================================================
-       FORMAT TEXT
+       CLEAN RESPONSE TEXT
+       ========================================================= */
+
+    _cleanResponseText(text, table) {
+      if (text === null || text === undefined) {
+        return "";
+      }
+
+      let value = String(text).replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+
+      /*
+       * Genie may return the same data twice:
+       *
+       * 1. Human-readable response text
+       * 2. Markdown table
+       *
+       * Since we already have message.table,
+       * remove the Markdown table from the text.
+       */
+
+      if (table && Array.isArray(table.columns) && Array.isArray(table.rows)) {
+        const lines = value.split("\n");
+
+        const kept = [];
+
+        let inMarkdownTable = false;
+
+        for (let i = 0; i < lines.length; i += 1) {
+          const current = lines[i].trim();
+
+          const next = i + 1 < lines.length ? lines[i + 1].trim() : "";
+
+          const isTableHeader =
+            current.includes("|") &&
+            /^\|?\s*:?-{2,}(\s*\|\s*:?-{2,})+\s*\|?$/.test(next);
+
+          if (isTableHeader) {
+            inMarkdownTable = true;
+
+            i += 1;
+
+            continue;
+          }
+
+          if (inMarkdownTable) {
+            if (current.includes("|")) {
+              continue;
+            }
+
+            inMarkdownTable = false;
+          }
+
+          kept.push(lines[i]);
+        }
+
+        value = kept.join("\n");
+      }
+
+      return value.replace(/\n{3,}/g, "\n\n").trim();
+    }
+
+    /* =========================================================
+       MARKDOWN FORMATTER
        ========================================================= */
 
     _formatText(text) {
@@ -1164,27 +1437,1273 @@
         return "";
       }
 
-      let value = String(text);
+      let value = String(text).replace(/\r\n/g, "\n").replace(/\r/g, "\n");
 
-      value = value
+      /* =======================================================
+         CODE BLOCKS
+         ======================================================= */
 
+      const codeBlocks = [];
+
+      value = value.replace(
+        /```(?:[a-zA-Z0-9_+-]+)?\n?([\s\S]*?)```/g,
+        (match, code) => {
+          const token = `@@CODEBLOCK${codeBlocks.length}@@`;
+
+          codeBlocks.push(code.trim());
+
+          return token;
+        },
+      );
+
+      /* =======================================================
+         ESCAPE HTML
+         ======================================================= */
+
+      value = this._escapeHtml(value);
+
+      /* =======================================================
+         HEADINGS
+         ======================================================= */
+
+      value = value.replace(/^###\s+(.+)$/gm, '<div class="md-h3">$1</div>');
+
+      value = value.replace(/^##\s+(.+)$/gm, '<div class="md-h2">$1</div>');
+
+      value = value.replace(/^#\s+(.+)$/gm, '<div class="md-h1">$1</div>');
+
+      /* =======================================================
+         BOLD
+         ======================================================= */
+
+      value = value.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
+
+      value = value.replace(/__(.+?)__/g, "<strong>$1</strong>");
+
+      /* =======================================================
+         ITALIC
+         ======================================================= */
+
+      value = value.replace(/(?<!\*)\*([^*\n]+)\*(?!\*)/g, "<em>$1</em>");
+
+      /* =======================================================
+         INLINE CODE
+         ======================================================= */
+
+      value = value.replace(/`([^`\n]+)`/g, "<code>$1</code>");
+
+      /* =======================================================
+         PROCESS LINES
+         ======================================================= */
+
+      const lines = value.split("\n");
+
+      const output = [];
+
+      let paragraph = [];
+
+      let listType = null;
+
+      /* =======================================================
+         FLUSH PARAGRAPH
+         ======================================================= */
+
+      const flushParagraph = () => {
+        if (!paragraph.length) {
+          return;
+        }
+
+        const content = paragraph.join(" ").trim();
+
+        if (content) {
+          output.push(`<p>${content}</p>`);
+        }
+
+        paragraph = [];
+      };
+
+      /* =======================================================
+         CLOSE LIST
+         ======================================================= */
+
+      const closeList = () => {
+        if (listType === "ul") {
+          output.push("</ul>");
+        }
+
+        if (listType === "ol") {
+          output.push("</ol>");
+        }
+
+        listType = null;
+      };
+
+      /* =======================================================
+         LINE PROCESSING
+         ======================================================= */
+
+      lines.forEach((line) => {
+        const trimmed = line.trim();
+
+        /* EMPTY LINE */
+
+        if (!trimmed) {
+          flushParagraph();
+
+          closeList();
+
+          return;
+        }
+
+        /* HEADING */
+
+        if (/^<div class="md-h[123]">/.test(trimmed)) {
+          flushParagraph();
+
+          closeList();
+
+          output.push(trimmed);
+
+          return;
+        }
+
+        /* UNORDERED LIST */
+
+        const unordered = trimmed.match(/^[-*+]\s+(.+)$/);
+
+        /* ORDERED LIST */
+
+        const ordered = trimmed.match(/^\d+[.)]\s+(.+)$/);
+
+        if (unordered) {
+          flushParagraph();
+
+          if (listType === "ol") {
+            output.push("</ol>");
+
+            listType = null;
+          }
+
+          if (!listType) {
+            output.push("<ul>");
+
+            listType = "ul";
+          }
+
+          output.push(`<li>${unordered[1]}</li>`);
+
+          return;
+        }
+
+        if (ordered) {
+          flushParagraph();
+
+          if (listType === "ul") {
+            output.push("</ul>");
+
+            listType = null;
+          }
+
+          if (!listType) {
+            output.push("<ol>");
+
+            listType = "ol";
+          }
+
+          output.push(`<li>${ordered[1]}</li>`);
+
+          return;
+        }
+
+        /* HORIZONTAL RULE */
+
+        if (/^---+$/.test(trimmed)) {
+          flushParagraph();
+
+          closeList();
+
+          output.push("<hr>");
+
+          return;
+        }
+
+        /* NORMAL TEXT */
+
+        closeList();
+
+        paragraph.push(trimmed);
+      });
+
+      flushParagraph();
+
+      closeList();
+
+      let html = output.join("");
+
+      /* =======================================================
+         RESTORE CODE BLOCKS
+         ======================================================= */
+
+      codeBlocks.forEach((code, index) => {
+        html = html.replace(
+          `@@CODEBLOCK${index}@@`,
+          `<pre class="md-codeblock"><code>${this._escapeHtml(
+            code,
+          )}</code></pre>`,
+        );
+      });
+
+      return html;
+    }
+
+    /* =========================================================
+       ESCAPE HTML
+       ========================================================= */
+
+    _escapeHtml(value) {
+      return String(value)
         .replace(/&/g, "&amp;")
-
         .replace(/</g, "&lt;")
-
         .replace(/>/g, "&gt;")
-
         .replace(/"/g, "&quot;")
-
         .replace(/'/g, "&#039;");
+    }
 
-      value = value.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
+    /* =========================================================
+       VISUALIZATION
+       ========================================================= */
 
-      value = value.replace(/`([^`]+)`/g, "<code>$1</code>");
+    _addVisualization(messageElement, table, message = {}) {
+      const dataset = this._prepareChartData(table);
 
-      value = value.replace(/\n/g, "<br>");
+      if (!dataset || !dataset.values.length) {
+        return;
+      }
 
-      return value;
+      const container = document.createElement("div");
+
+      container.className = "visualization-container";
+
+      /* =======================================================
+         HEADER
+         ======================================================= */
+
+      const header = document.createElement("div");
+
+      header.className = "visualization-header";
+
+      const title = document.createElement("div");
+
+      title.className = "visualization-title";
+
+      title.textContent =
+        message.visualization?.title ||
+        message.visualization?.name ||
+        (Array.isArray(message.visualizations) &&
+          message.visualizations[0]?.title) ||
+        `${dataset.metricLabel} by ${dataset.categoryLabel}`;
+
+      const typeLabel = document.createElement("div");
+
+      typeLabel.className = "chart-type";
+
+      typeLabel.textContent = this._getChartLabel(dataset.defaultType);
+
+      header.appendChild(title);
+
+      header.appendChild(typeLabel);
+
+      container.appendChild(header);
+
+      /* =======================================================
+         CHART TOOLBAR
+         ======================================================= */
+
+      const supported = this._getSupportedChartTypes(dataset);
+
+      if (supported.length > 1) {
+        const toolbar = document.createElement("div");
+
+        toolbar.className = "chart-toolbar";
+
+        supported.forEach((type) => {
+          const button = document.createElement("button");
+
+          button.type = "button";
+
+          button.className = `chart-button${
+            type === dataset.defaultType ? " active" : ""
+          }`;
+
+          button.textContent = this._getChartLabel(type);
+
+          button.addEventListener("click", () => {
+            toolbar.querySelectorAll(".chart-button").forEach((item) => {
+              item.classList.remove("active");
+            });
+
+            button.classList.add("active");
+
+            typeLabel.textContent = this._getChartLabel(type);
+
+            this._renderChart(chartWrap, dataset, type);
+          });
+
+          toolbar.appendChild(button);
+        });
+
+        container.appendChild(toolbar);
+      }
+
+      /* =======================================================
+         CHART AREA
+         ======================================================= */
+
+      const chartWrap = document.createElement("div");
+
+      chartWrap.className = "chart-wrap";
+
+      container.appendChild(chartWrap);
+
+      const bubble = messageElement.querySelector(".bubble");
+
+      if (bubble) {
+        bubble.appendChild(container);
+      }
+
+      requestAnimationFrame(() => {
+        this._renderChart(chartWrap, dataset, dataset.defaultType);
+      });
+    }
+
+    /* =========================================================
+       PREPARE CHART DATA
+       ========================================================= */
+
+    _prepareChartData(table) {
+      const columns = table.columns.map((column) =>
+        typeof column === "string"
+          ? column
+          : column?.name || column?.label || "Column",
+      );
+
+      const rows = table.rows.map((row) => {
+        if (Array.isArray(row)) {
+          return row;
+        }
+
+        if (row && typeof row === "object") {
+          return columns.map((key) => row[key]);
+        }
+
+        return [row];
+      });
+
+      if (!columns.length || !rows.length) {
+        return null;
+      }
+
+      /* =======================================================
+         NUMERIC COLUMNS
+         ======================================================= */
+
+      const numericColumns = columns
+        .map((column, index) => {
+          const numeric = rows
+            .map((row) => this._toNumber(row[index]))
+            .filter(Number.isFinite);
+
+          return {
+            index,
+            count: numeric.length,
+          };
+        })
+        .filter(
+          (item) => item.count >= Math.max(1, Math.ceil(rows.length * 0.6)),
+        );
+
+      if (!numericColumns.length) {
+        return null;
+      }
+
+      /* =======================================================
+         CHOOSE METRIC
+         ======================================================= */
+
+      let metric = numericColumns[0];
+
+      const preferred = numericColumns.find((item) =>
+        /amount|amt|total|movement|activity|value|sales|revenue|count|qty|quantity|balance|profit|cost|debit|credit|gc|lc|tc/i.test(
+          columns[item.index],
+        ),
+      );
+
+      if (preferred) {
+        metric = preferred;
+      }
+
+      /* =======================================================
+         CATEGORY CANDIDATES
+         ======================================================= */
+
+      const categoryCandidates = columns
+        .map((column, index) => ({
+          column,
+          index,
+        }))
+        .filter(
+          (item) =>
+            item.index !== metric.index &&
+            !numericColumns.some((numeric) => numeric.index === item.index),
+        );
+
+      /* =======================================================
+         PREFERRED CATEGORY
+         ======================================================= */
+
+      const preferredCategory = categoryCandidates.find((item) =>
+        /gl[_ ]?account|account|category|name|description|customer|company|cost[_ ]?center|profit[_ ]?center|date|period|month|year|quarter/i.test(
+          item.column,
+        ),
+      );
+
+      /* =======================================================
+         UNIQUE CATEGORY
+         ======================================================= */
+
+      const uniqueCategory = categoryCandidates
+        .map((item) => ({
+          ...item,
+
+          uniqueCount: new Set(rows.map((row) => String(row[item.index] ?? "")))
+            .size,
+        }))
+        .sort((a, b) => b.uniqueCount - a.uniqueCount)[0];
+
+      const category =
+        preferredCategory?.index ??
+        uniqueCategory?.index ??
+        Math.max(0, metric.index - 1);
+
+      /* =======================================================
+         VALUES
+         ======================================================= */
+
+      const values = rows
+        .map((row) => ({
+          category: row[category] == null ? "" : String(row[category]),
+
+          value: this._toNumber(row[metric.index]),
+        }))
+        .filter((item) => Number.isFinite(item.value));
+
+      if (!values.length) {
+        return null;
+      }
+
+      /* =======================================================
+         DATE DETECTION
+         ======================================================= */
+
+      const isDate = /date|period|month|year|quarter|week|time/i.test(
+        columns[category],
+      );
+
+      /* =======================================================
+         MULTIPLE NUMERIC COLUMNS
+         ======================================================= */
+
+      const xIndex = numericColumns[0].index;
+
+      const yIndex =
+        numericColumns.length > 1 ? numericColumns[1].index : metric.index;
+
+      return {
+        columns,
+
+        rows,
+
+        values,
+
+        categoryIndex: category,
+
+        metricIndex: metric.index,
+
+        xIndex,
+
+        yIndex,
+
+        categoryLabel: columns[category],
+
+        metricLabel: columns[metric.index],
+
+        defaultType:
+          numericColumns.length > 1 ? "scatter" : isDate ? "line" : "bar",
+      };
+    }
+
+    /* =========================================================
+       SUPPORTED CHART TYPES
+       ========================================================= */
+
+    _getSupportedChartTypes(dataset) {
+      const types = ["bar", "line"];
+
+      if (dataset.values.length <= 12) {
+        types.push("donut");
+      }
+
+      const hasScatterData =
+        dataset.rows.some((row) =>
+          Number.isFinite(this._toNumber(row[dataset.xIndex])),
+        ) &&
+        dataset.rows.some((row) =>
+          Number.isFinite(this._toNumber(row[dataset.yIndex])),
+        );
+
+      if (hasScatterData) {
+        types.push("scatter");
+      }
+
+      return [...new Set(types)];
+    }
+
+    /* =========================================================
+       CHART LABEL
+       ========================================================= */
+
+    _getChartLabel(type) {
+      return (
+        {
+          bar: "Bar",
+          line: "Line",
+          donut: "Donut",
+          scatter: "Scatter",
+        }[type] || type
+      );
+    }
+
+    /* =========================================================
+       NUMBER
+       ========================================================= */
+
+    _toNumber(value) {
+      if (typeof value === "number") {
+        return Number.isFinite(value) ? value : NaN;
+      }
+
+      if (value === null || value === undefined || value === "") {
+        return NaN;
+      }
+
+      const number = Number(
+        String(value).replace(/,/g, "").replace(/%$/, "").trim(),
+      );
+
+      return Number.isFinite(number) ? number : NaN;
+    }
+
+    /* =========================================================
+       FORMAT CHART NUMBER
+       ========================================================= */
+
+    _formatChartNumber(value) {
+      const abs = Math.abs(value);
+
+      if (abs >= 1e9) {
+        return (value / 1e9).toFixed(1) + "B";
+      }
+
+      if (abs >= 1e6) {
+        return (value / 1e6).toFixed(1) + "M";
+      }
+
+      if (abs >= 1e3) {
+        return (value / 1e3).toFixed(1) + "K";
+      }
+
+      return Number(value).toLocaleString(undefined, {
+        maximumFractionDigits: 2,
+      });
+    }
+
+    /* =========================================================
+       SCALE
+       ========================================================= */
+
+    _chartScale(values, includeZero = false) {
+      const clean = values.filter(Number.isFinite);
+
+      if (!clean.length) {
+        return {
+          min: 0,
+          max: 1,
+        };
+      }
+
+      let min = Math.min(...clean);
+
+      let max = Math.max(...clean);
+
+      if (includeZero) {
+        min = Math.min(0, min);
+
+        max = Math.max(0, max);
+      }
+
+      if (min === max) {
+        const pad = Math.abs(min || 1) * 0.1;
+
+        min -= pad;
+
+        max += pad;
+      }
+
+      const pad = (max - min) * 0.08;
+
+      return {
+        min: min - pad,
+
+        max: max + pad,
+      };
+    }
+
+    /* =========================================================
+       SVG HELPER
+       ========================================================= */
+
+    _svg(name, attrs = {}, text = null) {
+      const element = document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        name,
+      );
+
+      Object.entries(attrs).forEach(([key, value]) => {
+        element.setAttribute(key, String(value));
+      });
+
+      if (text !== null) {
+        element.textContent = String(text);
+      }
+
+      return element;
+    }
+
+    /* =========================================================
+       RENDER CHART
+       ========================================================= */
+
+    _renderChart(container, dataset, type) {
+      container.innerHTML = "";
+
+      const svg = this._svg("svg", {
+        viewBox: "0 0 720 300",
+
+        role: "img",
+
+        "aria-label": "Genie data visualization",
+      });
+
+      if (type === "donut") {
+        this._renderDonut(svg, dataset);
+      } else if (type === "scatter") {
+        this._renderScatter(svg, dataset);
+      } else if (type === "line") {
+        this._renderLine(svg, dataset);
+      } else {
+        this._renderBar(svg, dataset);
+      }
+
+      container.appendChild(svg);
+    }
+
+    /* =========================================================
+       AXES
+       ========================================================= */
+
+    _renderAxes(svg, plot, scale, xLabel, yLabel) {
+      const { left, top, width, height } = plot;
+
+      /* =======================================================
+         GRID LINES
+         ======================================================= */
+
+      for (let i = 0; i <= 4; i += 1) {
+        const y = top + height - (i / 4) * height;
+
+        const value = scale.min + (i / 4) * (scale.max - scale.min);
+
+        svg.appendChild(
+          this._svg("line", {
+            x1: left,
+            y1: y,
+
+            x2: left + width,
+
+            y2: y,
+
+            stroke: "#eeeeee",
+          }),
+        );
+
+        svg.appendChild(
+          this._svg(
+            "text",
+            {
+              x: left - 7,
+
+              y: y + 4,
+
+              "text-anchor": "end",
+
+              fill: "#777",
+
+              "font-size": 10,
+            },
+
+            this._formatChartNumber(value),
+          ),
+        );
+      }
+
+      /* =======================================================
+         Y AXIS
+         ======================================================= */
+
+      svg.appendChild(
+        this._svg("line", {
+          x1: left,
+
+          y1: top,
+
+          x2: left,
+
+          y2: top + height,
+
+          stroke: "#cfcfcf",
+        }),
+      );
+
+      /* =======================================================
+         X AXIS
+         ======================================================= */
+
+      svg.appendChild(
+        this._svg("line", {
+          x1: left,
+
+          y1: top + height,
+
+          x2: left + width,
+
+          y2: top + height,
+
+          stroke: "#cfcfcf",
+        }),
+      );
+
+      /* =======================================================
+         X LABEL
+         ======================================================= */
+
+      if (xLabel) {
+        svg.appendChild(
+          this._svg(
+            "text",
+            {
+              x: left + width / 2,
+
+              y: 285,
+
+              "text-anchor": "middle",
+
+              fill: "#777",
+
+              "font-size": 10,
+            },
+
+            this._truncateLabel(xLabel, 55),
+          ),
+        );
+      }
+
+      /* =======================================================
+         Y LABEL
+         ======================================================= */
+
+      if (yLabel) {
+        svg.appendChild(
+          this._svg(
+            "text",
+            {
+              x: 13,
+
+              y: top + height / 2,
+
+              "text-anchor": "middle",
+
+              fill: "#777",
+
+              "font-size": 10,
+
+              transform: `rotate(-90 13 ${top + height / 2})`,
+            },
+
+            this._truncateLabel(yLabel, 30),
+          ),
+        );
+      }
+    }
+
+    /* =========================================================
+       TRUNCATE LABEL
+       ========================================================= */
+
+    _truncateLabel(value, max = 15) {
+      const text = String(value ?? "");
+
+      return text.length > max ? `${text.slice(0, max - 1)}…` : text;
+    }
+
+    /* =========================================================
+       BAR CHART
+       ========================================================= */
+
+    _renderBar(svg, dataset) {
+      const plot = {
+        left: 72,
+        top: 20,
+        width: 615,
+        height: 220,
+      };
+
+      const values = dataset.values.slice(0, 20);
+
+      const scale = this._chartScale(
+        values.map((item) => item.value),
+        true,
+      );
+
+      const range = scale.max - scale.min;
+
+      this._renderAxes(
+        svg,
+        plot,
+        scale,
+        dataset.categoryLabel,
+        dataset.metricLabel,
+      );
+
+      const slot = plot.width / values.length;
+
+      const barWidth = Math.max(8, Math.min(34, slot * 0.62));
+
+      const zeroY =
+        plot.top + plot.height - ((0 - scale.min) / range) * plot.height;
+
+      values.forEach((item, index) => {
+        const x = plot.left + index * slot + (slot - barWidth) / 2;
+
+        const valueY =
+          plot.top +
+          plot.height -
+          ((item.value - scale.min) / range) * plot.height;
+
+        const y = Math.min(valueY, zeroY);
+
+        const height = Math.max(1, Math.abs(valueY - zeroY));
+
+        const rect = this._svg("rect", {
+          x,
+          y,
+          width: barWidth,
+          height,
+          rx: 2,
+
+          fill: "#5b7cfa",
+        });
+
+        rect.appendChild(
+          this._svg(
+            "title",
+            {},
+            `${item.category}: ${item.value.toLocaleString()}`,
+          ),
+        );
+
+        svg.appendChild(rect);
+
+        if (values.length <= 14) {
+          svg.appendChild(
+            this._svg(
+              "text",
+              {
+                x: x + barWidth / 2,
+
+                y: 258,
+
+                "text-anchor": "middle",
+
+                fill: "#666",
+
+                "font-size": 9,
+              },
+
+              this._truncateLabel(item.category, 12),
+            ),
+          );
+        }
+      });
+    }
+
+    /* =========================================================
+       LINE CHART
+       ========================================================= */
+
+    _renderLine(svg, dataset) {
+      const plot = {
+        left: 72,
+        top: 20,
+        width: 615,
+        height: 220,
+      };
+
+      const values = dataset.values.slice(0, 40);
+
+      const scale = this._chartScale(values.map((item) => item.value));
+
+      const range = scale.max - scale.min;
+
+      this._renderAxes(
+        svg,
+        plot,
+        scale,
+        dataset.categoryLabel,
+        dataset.metricLabel,
+      );
+
+      const points = values.map((item, index) => {
+        const x =
+          plot.left +
+          (values.length === 1
+            ? plot.width / 2
+            : (index / (values.length - 1)) * plot.width);
+
+        const y =
+          plot.top +
+          plot.height -
+          ((item.value - scale.min) / range) * plot.height;
+
+        return {
+          x,
+          y,
+          item,
+        };
+      });
+
+      /* =======================================================
+         LINE
+         ======================================================= */
+
+      svg.appendChild(
+        this._svg("polyline", {
+          points: points.map((point) => `${point.x},${point.y}`).join(" "),
+
+          fill: "none",
+
+          stroke: "#5b7cfa",
+
+          "stroke-width": 2,
+        }),
+      );
+
+      /* =======================================================
+         POINTS
+         ======================================================= */
+
+      points.forEach((point) => {
+        const circle = this._svg("circle", {
+          cx: point.x,
+
+          cy: point.y,
+
+          r: 3.5,
+
+          fill: "#5b7cfa",
+        });
+
+        circle.appendChild(
+          this._svg(
+            "title",
+            {},
+            `${point.item.category}: ${point.item.value.toLocaleString()}`,
+          ),
+        );
+
+        svg.appendChild(circle);
+      });
+    }
+
+    /* =========================================================
+       DONUT CHART
+       ========================================================= */
+
+    _renderDonut(svg, dataset) {
+      const values = dataset.values
+        .filter((item) => item.value > 0)
+        .slice(0, 12);
+
+      const total = values.reduce((sum, item) => sum + item.value, 0);
+
+      if (!total) {
+        svg.appendChild(
+          this._svg(
+            "text",
+            {
+              x: 360,
+              y: 150,
+
+              "text-anchor": "middle",
+
+              fill: "#888",
+
+              "font-size": 12,
+            },
+
+            "No positive values available for a donut chart",
+          ),
+        );
+
+        return;
+      }
+
+      const cx = 245;
+      const cy = 145;
+
+      const radius = 78;
+
+      const circumference = 2 * Math.PI * radius;
+
+      let offset = 0;
+
+      values.forEach((item, index) => {
+        const length = (item.value / total) * circumference;
+
+        const shade = `hsl(${index * 42}, 60%, 55%)`;
+
+        const circle = this._svg("circle", {
+          cx,
+          cy,
+          r: radius,
+
+          fill: "none",
+
+          stroke: shade,
+
+          "stroke-width": 32,
+
+          "stroke-dasharray": `${length} ${circumference - length}`,
+
+          "stroke-dashoffset": -offset,
+
+          transform: `rotate(-90 ${cx} ${cy})`,
+        });
+
+        circle.appendChild(
+          this._svg(
+            "title",
+            {},
+            `${item.category}: ${item.value.toLocaleString()}`,
+          ),
+        );
+
+        svg.appendChild(circle);
+
+        offset += length;
+      });
+
+      /* =======================================================
+         CENTER TOTAL
+         ======================================================= */
+
+      svg.appendChild(
+        this._svg(
+          "text",
+          {
+            x: cx,
+
+            y: cy - 2,
+
+            "text-anchor": "middle",
+
+            fill: "#333",
+
+            "font-size": 13,
+
+            "font-weight": 600,
+          },
+
+          this._formatChartNumber(total),
+        ),
+      );
+
+      svg.appendChild(
+        this._svg(
+          "text",
+          {
+            x: cx,
+
+            y: cy + 15,
+
+            "text-anchor": "middle",
+
+            fill: "#888",
+
+            "font-size": 10,
+          },
+
+          "Total",
+        ),
+      );
+
+      /* =======================================================
+         LEGEND
+         ======================================================= */
+
+      values.forEach((item, index) => {
+        const y = 34 + index * 21;
+
+        const shade = `hsl(${index * 42}, 60%, 55%)`;
+
+        svg.appendChild(
+          this._svg("rect", {
+            x: 430,
+
+            y: y - 8,
+
+            width: 10,
+
+            height: 10,
+
+            rx: 2,
+
+            fill: shade,
+          }),
+        );
+
+        svg.appendChild(
+          this._svg(
+            "text",
+            {
+              x: 448,
+
+              y,
+
+              fill: "#555",
+
+              "font-size": 10,
+            },
+
+            `${this._truncateLabel(item.category, 24)} (${(
+              (item.value / total) *
+              100
+            ).toFixed(1)}%)`,
+          ),
+        );
+      });
+    }
+
+    /* =========================================================
+       SCATTER CHART
+       ========================================================= */
+
+    _renderScatter(svg, dataset) {
+      const plot = {
+        left: 72,
+        top: 20,
+        width: 615,
+        height: 220,
+      };
+
+      const points = dataset.rows
+        .map((row) => ({
+          x: this._toNumber(row[dataset.xIndex]),
+
+          y: this._toNumber(row[dataset.yIndex]),
+        }))
+        .filter((point) => Number.isFinite(point.x) && Number.isFinite(point.y))
+        .slice(0, 100);
+
+      if (!points.length) {
+        svg.appendChild(
+          this._svg(
+            "text",
+            {
+              x: 360,
+              y: 150,
+
+              "text-anchor": "middle",
+
+              fill: "#888",
+
+              "font-size": 12,
+            },
+
+            "No numeric pairs available for a scatter chart",
+          ),
+        );
+
+        return;
+      }
+
+      const xScale = this._chartScale(points.map((point) => point.x));
+
+      const yScale = this._chartScale(points.map((point) => point.y));
+
+      /* =======================================================
+         GRID
+         ======================================================= */
+
+      this._renderAxes(
+        svg,
+        plot,
+        yScale,
+        dataset.columns[dataset.xIndex],
+        dataset.columns[dataset.yIndex],
+      );
+
+      points.forEach((point) => {
+        const x =
+          plot.left +
+          ((point.x - xScale.min) / (xScale.max - xScale.min)) * plot.width;
+
+        const y =
+          plot.top +
+          plot.height -
+          ((point.y - yScale.min) / (yScale.max - yScale.min)) * plot.height;
+
+        const circle = this._svg("circle", {
+          cx: x,
+
+          cy: y,
+
+          r: 4,
+
+          fill: "#5b7cfa",
+
+          opacity: 0.72,
+        });
+
+        circle.appendChild(
+          this._svg(
+            "title",
+            {},
+            `(${point.x.toLocaleString()}, ${point.y.toLocaleString()})`,
+          ),
+        );
+
+        svg.appendChild(circle);
+      });
     }
 
     /* =========================================================
@@ -1320,7 +2839,6 @@
           <div class="welcome-title">
             Ask Genie
           </div>
-
 
           <div>
             Ask a financial question in plain English.
