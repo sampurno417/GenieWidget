@@ -129,26 +129,101 @@
 
 
           <!-- =========================================
-               ACCESS TOKEN
+               WORKSPACE HOST
                ========================================= -->
 
           <div class="field">
 
             <label class="label">
-              OAuth Access Token
+              Databricks Workspace Host
             </label>
 
             <input
-              id="accessToken"
-              type="password"
+              id="workspaceHost"
+              type="text"
               autocomplete="off"
               spellcheck="false"
-              placeholder="Paste OAuth access token"
+              placeholder="https://dbc-xxxxxxxx.cloud.databricks.com"
             />
 
             <div class="help">
-              Short-lived Databricks OAuth 2.0 access token
-              used to authenticate API requests.
+              Databricks workspace URL used for OAuth authentication.
+            </div>
+
+          </div>
+
+
+          <!-- =========================================
+               CLIENT ID
+               ========================================= -->
+
+          <div class="field">
+
+            <label class="label">
+              OAuth Client ID
+            </label>
+
+            <input
+              id="clientId"
+              type="text"
+              autocomplete="off"
+              spellcheck="false"
+              placeholder="OAuth service principal client ID"
+            />
+
+            <div class="help">
+              OAuth client ID for the Databricks service principal.
+            </div>
+
+          </div>
+
+
+          <!-- =========================================
+               CLIENT SECRET
+               ========================================= -->
+
+          <div class="field">
+
+            <label class="label">
+              OAuth Client Secret
+            </label>
+
+            <input
+              id="clientSecret"
+              type="password"
+              autocomplete="off"
+              spellcheck="false"
+              placeholder="OAuth client secret"
+            />
+
+            <div class="help">
+              Service principal OAuth secret used to obtain a short-lived access token.
+            </div>
+
+          </div>
+
+
+          <!-- =========================================
+               OAUTH SCOPE
+               ========================================= -->
+
+          <div class="field">
+
+            <label class="label">
+              OAuth Scope
+            </label>
+
+            <input
+              id="oauthScope"
+              type="text"
+              autocomplete="off"
+              spellcheck="false"
+              value="all-apis"
+              placeholder="all-apis"
+            />
+
+            <div class="help">
+              OAuth scope requested from Databricks.
             </div>
 
           </div>
@@ -159,9 +234,9 @@
                ========================================= -->
 
           <div class="warning">
-            POC only: do not use a long-lived token or
-            client secret here. This value is available
-            to the browser.
+            POC only: the OAuth client secret is entered
+            in the SAC browser and is therefore browser-visible.
+            Do not use this approach for production.
           </div>
 
         </div>
@@ -175,7 +250,14 @@
 
       this._backendUrlInput = this._shadowRoot.querySelector("#backendUrl");
 
-      this._accessTokenInput = this._shadowRoot.querySelector("#accessToken");
+      this._workspaceHostInput =
+        this._shadowRoot.querySelector("#workspaceHost");
+
+      this._clientIdInput = this._shadowRoot.querySelector("#clientId");
+
+      this._clientSecretInput = this._shadowRoot.querySelector("#clientSecret");
+
+      this._oauthScopeInput = this._shadowRoot.querySelector("#oauthScope");
 
       /*
        * =====================================================
@@ -203,25 +285,97 @@
 
       /*
        * =====================================================
-       * ACCESS TOKEN EVENTS
+       * WORKSPACE HOST EVENTS
        * =====================================================
        */
 
-      this._accessTokenInput.addEventListener("change", () => {
+      this._workspaceHostInput.addEventListener("change", () => {
         this._propertiesChanged();
       });
 
-      this._accessTokenInput.addEventListener("blur", () => {
+      this._workspaceHostInput.addEventListener("blur", () => {
         this._propertiesChanged();
       });
 
-      this._accessTokenInput.addEventListener("keydown", (event) => {
+      this._workspaceHostInput.addEventListener("keydown", (event) => {
         if (event.key === "Enter") {
           event.preventDefault();
 
           this._propertiesChanged();
 
-          this._accessTokenInput.blur();
+          this._workspaceHostInput.blur();
+        }
+      });
+
+      /*
+       * =====================================================
+       * CLIENT ID EVENTS
+       * =====================================================
+       */
+
+      this._clientIdInput.addEventListener("change", () => {
+        this._propertiesChanged();
+      });
+
+      this._clientIdInput.addEventListener("blur", () => {
+        this._propertiesChanged();
+      });
+
+      this._clientIdInput.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") {
+          event.preventDefault();
+
+          this._propertiesChanged();
+
+          this._clientIdInput.blur();
+        }
+      });
+
+      /*
+       * =====================================================
+       * CLIENT SECRET EVENTS
+       * =====================================================
+       */
+
+      this._clientSecretInput.addEventListener("change", () => {
+        this._propertiesChanged();
+      });
+
+      this._clientSecretInput.addEventListener("blur", () => {
+        this._propertiesChanged();
+      });
+
+      this._clientSecretInput.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") {
+          event.preventDefault();
+
+          this._propertiesChanged();
+
+          this._clientSecretInput.blur();
+        }
+      });
+
+      /*
+       * =====================================================
+       * OAUTH SCOPE EVENTS
+       * =====================================================
+       */
+
+      this._oauthScopeInput.addEventListener("change", () => {
+        this._propertiesChanged();
+      });
+
+      this._oauthScopeInput.addEventListener("blur", () => {
+        this._propertiesChanged();
+      });
+
+      this._oauthScopeInput.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") {
+          event.preventDefault();
+
+          this._propertiesChanged();
+
+          this._oauthScopeInput.blur();
         }
       });
     }
@@ -250,11 +404,41 @@
       if (
         changedProperties &&
         typeof changedProperties.has === "function" &&
-        changedProperties.has("accessToken")
+        changedProperties.has("workspaceHost")
       ) {
-        const value = changedProperties.get("accessToken");
+        const value = changedProperties.get("workspaceHost");
 
-        this.accessToken = value || "";
+        this.workspaceHost = value || "";
+      }
+
+      if (
+        changedProperties &&
+        typeof changedProperties.has === "function" &&
+        changedProperties.has("clientId")
+      ) {
+        const value = changedProperties.get("clientId");
+
+        this.clientId = value || "";
+      }
+
+      if (
+        changedProperties &&
+        typeof changedProperties.has === "function" &&
+        changedProperties.has("clientSecret")
+      ) {
+        const value = changedProperties.get("clientSecret");
+
+        this.clientSecret = value || "";
+      }
+
+      if (
+        changedProperties &&
+        typeof changedProperties.has === "function" &&
+        changedProperties.has("oauthScope")
+      ) {
+        const value = changedProperties.get("oauthScope");
+
+        this.oauthScope = value || "all-apis";
       }
     }
 
@@ -268,8 +452,20 @@
         this._backendUrlInput.value = this.backendUrl || "";
       }
 
-      if (this._accessTokenInput) {
-        this._accessTokenInput.value = this.accessToken || "";
+      if (this._workspaceHostInput) {
+        this._workspaceHostInput.value = this.workspaceHost || "";
+      }
+
+      if (this._clientIdInput) {
+        this._clientIdInput.value = this.clientId || "";
+      }
+
+      if (this._clientSecretInput) {
+        this._clientSecretInput.value = this.clientSecret || "";
+      }
+
+      if (this._oauthScopeInput) {
+        this._oauthScopeInput.value = this.oauthScope || "all-apis";
       }
     }
 
@@ -295,22 +491,82 @@
 
     /*
      * =========================================================
-     * ACCESS TOKEN PROPERTY
+     * WORKSPACE HOST PROPERTY
      * =========================================================
      */
 
-    set accessToken(value) {
-      if (this._accessTokenInput) {
-        this._accessTokenInput.value = value || "";
+    set workspaceHost(value) {
+      if (this._workspaceHostInput) {
+        this._workspaceHostInput.value = value || "";
       }
     }
 
-    get accessToken() {
-      if (!this._accessTokenInput) {
+    get workspaceHost() {
+      if (!this._workspaceHostInput) {
         return "";
       }
 
-      return this._accessTokenInput.value || "";
+      return this._workspaceHostInput.value || "";
+    }
+
+    /*
+     * =========================================================
+     * CLIENT ID PROPERTY
+     * =========================================================
+     */
+
+    set clientId(value) {
+      if (this._clientIdInput) {
+        this._clientIdInput.value = value || "";
+      }
+    }
+
+    get clientId() {
+      if (!this._clientIdInput) {
+        return "";
+      }
+
+      return this._clientIdInput.value || "";
+    }
+
+    /*
+     * =========================================================
+     * CLIENT SECRET PROPERTY
+     * =========================================================
+     */
+
+    set clientSecret(value) {
+      if (this._clientSecretInput) {
+        this._clientSecretInput.value = value || "";
+      }
+    }
+
+    get clientSecret() {
+      if (!this._clientSecretInput) {
+        return "";
+      }
+
+      return this._clientSecretInput.value || "";
+    }
+
+    /*
+     * =========================================================
+     * OAUTH SCOPE PROPERTY
+     * =========================================================
+     */
+
+    set oauthScope(value) {
+      if (this._oauthScopeInput) {
+        this._oauthScopeInput.value = value || "all-apis";
+      }
+    }
+
+    get oauthScope() {
+      if (!this._oauthScopeInput) {
+        return "all-apis";
+      }
+
+      return this._oauthScopeInput.value || "all-apis";
     }
 
     /*
@@ -325,7 +581,14 @@
           detail: {
             properties: {
               backendUrl: this.backendUrl,
-              accessToken: this.accessToken,
+
+              workspaceHost: this.workspaceHost,
+
+              clientId: this.clientId,
+
+              clientSecret: this.clientSecret,
+
+              oauthScope: this.oauthScope,
             },
           },
         }),

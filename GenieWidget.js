@@ -13,6 +13,13 @@
 
       this._props = {
         backendUrl: "",
+        workspaceHost: "",
+        clientId: "",
+        clientSecret: "",
+        oauthScope: "all-apis",
+
+        // Runtime OAuth token.
+        // This is generated automatically and is not persisted.
         accessToken: "",
       };
 
@@ -860,6 +867,130 @@
     }
 
     /* =========================================================
+       WORKSPACE HOST
+       ========================================================= */
+
+    set workspaceHost(value) {
+      this._props = {
+        ...this._props,
+        workspaceHost: value || "",
+      };
+    }
+
+    get workspaceHost() {
+      return this._props.workspaceHost || "";
+    }
+
+    setWorkspaceHost(host) {
+      this.dispatchEvent(
+        new CustomEvent("propertiesChanged", {
+          detail: {
+            properties: {
+              workspaceHost: host || "",
+            },
+          },
+        }),
+      );
+    }
+
+    getWorkspaceHost() {
+      return this.workspaceHost;
+    }
+
+    /* =========================================================
+       CLIENT ID
+       ========================================================= */
+
+    set clientId(value) {
+      this._props = {
+        ...this._props,
+        clientId: value || "",
+      };
+    }
+
+    get clientId() {
+      return this._props.clientId || "";
+    }
+
+    setClientId(clientId) {
+      this.dispatchEvent(
+        new CustomEvent("propertiesChanged", {
+          detail: {
+            properties: {
+              clientId: clientId || "",
+            },
+          },
+        }),
+      );
+    }
+
+    getClientId() {
+      return this.clientId;
+    }
+
+    /* =========================================================
+       CLIENT SECRET
+       ========================================================= */
+
+    set clientSecret(value) {
+      this._props = {
+        ...this._props,
+        clientSecret: value || "",
+      };
+    }
+
+    get clientSecret() {
+      return this._props.clientSecret || "";
+    }
+
+    setClientSecret(clientSecret) {
+      this.dispatchEvent(
+        new CustomEvent("propertiesChanged", {
+          detail: {
+            properties: {
+              clientSecret: clientSecret || "",
+            },
+          },
+        }),
+      );
+    }
+
+    getClientSecret() {
+      return this.clientSecret;
+    }
+
+    /* =========================================================
+       OAUTH SCOPE
+       ========================================================= */
+
+    set oauthScope(value) {
+      this._props = {
+        ...this._props,
+        oauthScope: value || "all-apis",
+      };
+    }
+
+    get oauthScope() {
+      return this._props.oauthScope || "all-apis";
+    }
+
+    setOauthScope(scope) {
+      this.dispatchEvent(
+        new CustomEvent("propertiesChanged", {
+          detail: {
+            properties: {
+              oauthScope: scope || "all-apis",
+            },
+          },
+        }),
+      );
+    }
+
+    getOauthScope() {
+      return this.oauthScope;
+    }
+
+    /* =========================================================
        ACCESS TOKEN
        ========================================================= */
 
@@ -903,6 +1034,153 @@
       }
 
       return base.replace(/\/+$/, "") + path;
+    }
+
+    /* =========================================================
+       OAUTH TOKEN
+       ========================================================= */
+
+    async _getAccessToken() {
+      const now = Date.now();
+
+      /*
+       * Reuse the current token while it is still valid.
+       */
+      if (
+        this.accessToken &&
+        this._accessTokenExpiresAt &&
+        now < this._accessTokenExpiresAt - this._tokenRefreshBufferMs
+      ) {
+        return this.accessToken;
+      }
+
+      /*
+       * Prevent multiple simultaneous token requests.
+       */
+      if (this._tokenRequestPromise) {
+        return this._tokenRequestPromise;
+      }
+
+      const workspaceHost = this.workspaceHost.trim();
+      const clientId = this.clientId.trim();
+      const clientSecret = this.clientSecret;
+      const scope = this.oauthScope.trim() || "all-apis";
+
+      if (!workspaceHost) {
+        throw new Error(
+          "Databricks Workspace Host is not configured.",
+        );
+      }
+
+      if (!clientId) {
+        throw new Error(
+          "OAuth Client ID is not configured.",
+        );
+      }
+
+      if (!clientSecret) {
+        throw new Error(
+          "OAuth Client Secret is not configured.",
+        );
+      }
+
+      const tokenUrl =
+        workspaceHost.replace(/\/+$/, "") +
+        "/oidc/v1/token";
+
+      this._tokenRequestPromise = (async () => {
+        try {
+          const credentials =
+            btoa(`${clientId}:${clientSecret}`);
+
+          const body = new URLSearchParams();
+
+          body.set(
+            "grant_type",
+            "client_credentials",
+          );
+
+          body.set(
+            "scope",
+            scope,
+          );
+
+          const response = await fetch(tokenUrl, {
+            method: "POST",
+
+            headers: {
+              Authorization:
+                `Basic ${credentials}`,
+
+              "Content-Type":
+                "application/x-www-form-urlencoded",
+
+              Accept:
+                "application/json",
+            },
+
+            body: body.toString(),
+          });
+
+          if (!response.ok) {
+            let errorMessage =
+              `OAuth token request failed with HTTP ${response.status}.`;
+
+            try {
+              const errorData =
+                await response.json();
+
+              if (errorData.error_description) {
+                errorMessage +=
+                  ` ${errorData.error_description}`;
+              } else if (errorData.error) {
+                errorMessage +=
+                  ` ${errorData.error}`;
+              }
+            } catch (error) {
+              // Keep the HTTP status error.
+            }
+
+            throw new Error(errorMessage);
+          }
+
+          const data =
+            await response.json();
+
+          if (!data.access_token) {
+            throw new Error(
+              "Databricks OAuth response did not contain an access token.",
+            );
+          }
+
+          this.accessToken =
+            data.access_token;
+
+          const expiresIn =
+            Number(data.expires_in);
+
+          /*
+           * Databricks normally returns expires_in
+           * in seconds.
+           *
+           * Fall back to one hour if it is missing.
+           */
+          const lifetimeMs =
+            Number.isFinite(expiresIn) &&
+            expiresIn > 0
+              ? expiresIn * 1000
+              : 60 * 60 * 1000;
+
+          this._accessTokenExpiresAt =
+            Date.now() + lifetimeMs;
+
+          return this.accessToken;
+        } finally {
+          this._tokenRequestPromise = null;
+        }
+      })();
+
+      return this._tokenRequestPromise;
     }
 
     /* =========================================================
@@ -973,15 +1251,67 @@
       }
 
       /* =====================================================
-         ACCESS TOKEN VALIDATION
+         OAUTH CONFIGURATION VALIDATION
          ===================================================== */
 
-      if (!this.accessToken.trim()) {
-        const error = "Databricks OAuth access token is not configured.";
+      if (!this.workspaceHost.trim()) {
+        const error =
+          "Databricks Workspace Host is not configured.";
 
-        this._addMessage("assistant", error, true);
+        this._addMessage(
+          "assistant",
+          error,
+          true,
+        );
 
-        this._setStatus("error", "Error");
+        this._setStatus(
+          "error",
+          "Error",
+        );
+
+        this._fireEvent("onError", {
+          error: error,
+        });
+
+        return error;
+      }
+
+      if (!this.clientId.trim()) {
+        const error =
+          "OAuth Client ID is not configured.";
+
+        this._addMessage(
+          "assistant",
+          error,
+          true,
+        );
+
+        this._setStatus(
+          "error",
+          "Error",
+        );
+
+        this._fireEvent("onError", {
+          error: error,
+        });
+
+        return error;
+      }
+
+      if (!this.clientSecret) {
+        const error =
+          "OAuth Client Secret is not configured.";
+
+        this._addMessage(
+          "assistant",
+          error,
+          true,
+        );
+
+        this._setStatus(
+          "error",
+          "Error",
+        );
 
         this._fireEvent("onError", {
           error: error,
@@ -1013,6 +1343,12 @@
       const typingMessage = this._addTypingMessage();
 
       try {
+        /* ===================================================
+           GENERATE / REFRESH OAUTH TOKEN
+           =================================================== */
+
+        await this._getAccessToken();
+
         /* ===================================================
            POST /api/chat
            =================================================== */
@@ -1124,8 +1460,14 @@
             }
 
             /* =========================================
-                   GET STATUS
-                   ========================================= */
+               ENSURE VALID OAUTH TOKEN
+               ========================================= */
+
+            await this._getAccessToken();
+
+            /* =========================================
+               GET STATUS
+               ========================================= */
 
             const response = await fetch(
               this._getApiUrl(

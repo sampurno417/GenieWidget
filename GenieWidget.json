@@ -1,10 +1,9 @@
 {
   "id": "com.sampurno.geniewidget",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "name": "Genie Assistant",
   "description": "SAP Analytics Cloud custom widget for communicating with a Databricks Genie backend.",
   "newInstancePrefix": "GenieAssistant",
-
   "webcomponents": [
     {
       "kind": "main",
@@ -21,21 +20,38 @@
       "ignoreIntegrity": true
     }
   ],
-
   "properties": {
     "backendUrl": {
       "type": "string",
       "description": "URL of the Databricks Flask application.",
       "default": ""
     },
-
+    "workspaceHost": {
+      "type": "string",
+      "description": "Databricks workspace host used for OAuth authentication.",
+      "default": ""
+    },
+    "clientId": {
+      "type": "string",
+      "description": "Databricks OAuth service principal client ID.",
+      "default": ""
+    },
+    "clientSecret": {
+      "type": "string",
+      "description": "Databricks OAuth service principal client secret.",
+      "default": ""
+    },
+    "oauthScope": {
+      "type": "string",
+      "description": "OAuth scope requested from Databricks.",
+      "default": "all-apis"
+    },
     "accessToken": {
       "type": "string",
-      "description": "Databricks OAuth 2.0 access token used to authenticate requests to the Databricks App.",
+      "description": "Optional manually supplied Databricks OAuth access token. Used as a legacy fallback.",
       "default": ""
     }
   },
-
   "methods": {
     "askGenie": {
       "description": "Send a natural-language question to Databricks Genie.",
@@ -47,19 +63,16 @@
       ],
       "returnType": "string"
     },
-
     "clearChat": {
       "description": "Clear the current chat conversation.",
       "parameters": [],
       "returnType": "void"
     },
-
     "getSessionId": {
       "description": "Get the current Genie session ID.",
       "parameters": [],
       "returnType": "string"
     },
-
     "setBackendUrl": {
       "description": "Set the Databricks backend URL.",
       "parameters": [
@@ -70,13 +83,11 @@
       ],
       "returnType": "void"
     },
-
     "getBackendUrl": {
       "description": "Get the configured Databricks backend URL.",
       "parameters": [],
       "returnType": "string"
     },
-
     "setAccessToken": {
       "description": "Set the Databricks OAuth access token.",
       "parameters": [
@@ -87,23 +98,79 @@
       ],
       "returnType": "void"
     },
-
     "getAccessToken": {
-      "description": "Get the configured Databricks OAuth access token.",
+      "description": "Get the current Databricks OAuth access token.",
+      "parameters": [],
+      "returnType": "string"
+    },
+    "setWorkspaceHost": {
+      "description": "Set the Databricks workspace host.",
+      "parameters": [
+        {
+          "name": "host",
+          "type": "string"
+        }
+      ],
+      "returnType": "void"
+    },
+    "getWorkspaceHost": {
+      "description": "Get the configured Databricks workspace host.",
+      "parameters": [],
+      "returnType": "string"
+    },
+    "setClientId": {
+      "description": "Set the Databricks OAuth client ID.",
+      "parameters": [
+        {
+          "name": "clientId",
+          "type": "string"
+        }
+      ],
+      "returnType": "void"
+    },
+    "getClientId": {
+      "description": "Get the configured Databricks OAuth client ID.",
+      "parameters": [],
+      "returnType": "string"
+    },
+    "setClientSecret": {
+      "description": "Set the Databricks OAuth client secret.",
+      "parameters": [
+        {
+          "name": "clientSecret",
+          "type": "string"
+        }
+      ],
+      "returnType": "void"
+    },
+    "getClientSecret": {
+      "description": "Get the configured Databricks OAuth client secret.",
+      "parameters": [],
+      "returnType": "string"
+    },
+    "setOauthScope": {
+      "description": "Set the Databricks OAuth scope.",
+      "parameters": [
+        {
+          "name": "scope",
+          "type": "string"
+        }
+      ],
+      "returnType": "void"
+    },
+    "getOauthScope": {
+      "description": "Get the configured Databricks OAuth scope.",
       "parameters": [],
       "returnType": "string"
     }
   },
-
   "events": {
     "onMessageSent": {
       "description": "Fired when a question is sent to the backend."
     },
-
     "onResponseReceived": {
       "description": "Fired when a Genie response is received."
     },
-
     "onError": {
       "description": "Fired when an error occurs."
     }
